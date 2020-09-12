@@ -1,0 +1,408 @@
+
+<div class="row">
+    <div class="col-lg-12"><br />
+       
+        <ol class="breadcrumb">
+            <li><a  href="<?php echo base_url('transaksiteknisi'); ?>">Transaksi</a></li>
+            <li class="active">Pembelian</li>
+        </ol>
+        
+        <?php
+            
+            if(!empty($message)) {
+                echo $message;
+            }
+        ?>
+
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        
+    <!-- <legend>Transaksi</legend> -->
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form class="form-horizontal" action="<?php echo site_url('transaksiteknisi/simpan');?>" method="post">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-lg-4 ">No. Transaksi</label>
+                            <div class="col-lg-7">
+                                <input type="text" id="no_transaksi" name="no_transaksi" class="form-control" value="<?php echo $autonumber ?>" readonly="readonly">
+                            </div>
+                        </div>
+                    </div>
+                        <div class="col-md-6">    
+                        <div class="form-group">
+                            <label class="col-lg-4 ">Tanggal Transaksi</label>
+                            <div class="col-lg-7">
+                                <input type="text" id="tanggal_transaksi" name="tanggal_transaksi" class="form-control" value="<?php echo tgl_indonesia_transaksi($tanggal_transaksi); ?>" readonly="readonly">
+                            </div>
+                        </div>
+                        
+                        
+                    </div>                    
+                </form>
+            </div>
+        </div>
+
+        <!-- data barang -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>Data Pembelian</strong>
+            </div>
+            
+            <div class="panel-body">
+            <form class="form-horizontal">                
+                    <div class="form-group ">                    
+                        <div class="col-sm-6">
+                            <label class="sr-only ">merk</label>
+                            <button id="tambah_barang" class="btn btn-primary"> Tambah Barang <i class="glyphicon glyphicon-plus"></i></button>
+                        </div>
+                        <div class="col-sm-6">  
+                            <label class="sr-only">merk</label>
+                            <button id="cari" class="btn btn-success"> Cari Barang <i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="col-lg-4 ">Kode Barang</label>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control"  id="kode_barang" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 ">Merk</label>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control"  id="merk" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 ">Type / Model</label>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control"  id="tipe" readonly="readonly">
+                        </div>
+                    </div>
+                    <!--<div class="form-group">
+                        <label class="col-lg-4 ">IMEI</label>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control"  id="imei" readonly="readonly">
+                        </div>
+                    </div>                    -->
+                </div>
+                <div class="col-md-6">
+                    <!--<div class="form-group">
+                        <label class="col-lg-4 ">Harga</label>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control"  id="harga" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 ">Qty</label>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control"  id="qty">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 ">Diskon</label>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control"  id="tipe">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 ">Total Harga</label>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control"  id="tipe" readonly="readonly">
+                        </div>
+                    </div>-->
+                </div>
+            </form>
+                <br /><br />
+
+                <!-- buat tampil tabel tmp     -->
+                <div id="tampil"></div>
+                
+            </div>
+            
+            
+            
+            <div class="panel-footer">
+                <button id="simpan" class="btn btn-primary"><i class="glyphicon glyphicon-hdd"></i> Simpan</button>
+            </div>
+        </div>
+        <!-- end data barang -->
+
+        
+    </div>
+    <!-- /.col-lg-12 -->
+
+</div>
+<!-- /.end row -->
+
+ 
+
+<!-- Modal Cari barang -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title"><strong>Search Barang</strong></h4>
+        </div>
+        <div class="modal-body"><br />
+            <!--<label class="col-lg-4 control-label">Cari Nama Nasabah</label>-->
+            <input type="text" name="caribarang" id="caribarang" class="form-control" placeholder="please search barang code">
+
+            <div id="tampilbarang"></div>
+
+        </div>
+
+        <br /><br />
+        <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <!--<button type="button" class="btn btn-primary" id="konfirmasi">Hapus</button>-->
+        </div>
+    </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- End Modal Cari barang -->
+
+
+
+
+
+<!-- jQuery -->
+<script src="<?php echo base_url(); ?>template/backend/sbadmin/vendor/jquery/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="<?php echo base_url(); ?>template/backend/sbadmin/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="<?php echo base_url(); ?>template/backend/sbadmin/vendor/metisMenu/metisMenu.min.js"></script>
+
+<!-- DataTables JavaScript -->
+<script src="<?php echo base_url(); ?>template/backend/sbadmin/vendor/datatables/js/jquery.dataTables.min.js"></script>
+<script src="<?php echo base_url(); ?>template/backend/sbadmin/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+<script src="<?php echo base_url(); ?>template/backend/sbadmin/vendor/datatables-responsive/dataTables.responsive.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="<?php echo base_url(); ?>template/backend/sbadmin/dist/js/sb-admin-2.js"></script>
+
+<!-- Page-Level Demo Scripts - Tables - Use for reference -->
+<script>
+$(document).ready(function() {
+
+    //alert('');
+
+    $('#dataTables-example').DataTable({
+        responsive: true
+    });
+
+
+    //load data tmp 
+    function loadData()
+    {
+        $("#tampil").load("<?php echo site_url('transaksiteknisi/tampil_tmp') ?>");
+    }
+    loadData();
+
+    //function buat mengkosong form data barang setelah di tambah ke tmp
+    function EmptyData()
+    {
+        $("#kode_barang").val("");
+        $("#tipe").val("");
+        $("#merk").val("");
+    }
+
+    //ambil data kasir berdasarkan imei
+    // $("#imei").click(function(){
+    $("#imeii").change(function(){    
+        var imeii = $("#imeii").val();
+        
+        $.ajax({
+            url:"<?php echo site_url('transaksiteknisi/cari_kasir');?>",
+            type:"POST",
+            data:"imeii="+imeii,
+            cache:false,
+            success:function(html){
+                $("#tipee").val(html);
+                // document.write(html)
+            }
+        })
+        
+    });
+
+    //show modal search barang
+    $("#cari").click(function(){
+        $("#myModal2").modal("show");
+        //return false;  biar gk langsung ilang
+    })
+
+    //search barang
+    $("#caribarang").keyup(function(){
+        var caribarang = $('#caribarang').val();
+
+         $.ajax({
+            url:"<?php echo site_url('transaksiteknisi/cari_barang');?>",
+            type:"POST",
+            data:"caribarang="+caribarang,
+            cache:false,
+            success:function(hasil){
+                $("#tampilbarang").html(hasil);
+                
+            }
+        })
+        
+    })
+
+
+    //tambah barang dari modal ke form
+    
+    // $(".tambah").live("click", function(){
+    $('body').on('click', '.tambah', function(){
+        
+        var kode_barang = $(this).attr("kode");
+        var tipe     = $(this).attr("tipe");
+        var merk = $(this).attr("merk");
+        
+        $("#kode_barang").val(kode_barang);
+        $("#tipe").val(tipe);
+        $("#merk").val(merk);
+
+        $("#myModal2").modal("hide");
+        //console.log(kode_barang);
+       
+    });
+
+
+    //event keypress cari kode
+    $("#kode_barang").keypress(function(){
+        
+        //13 adalah kode asci buat enter
+        if(event.which == 13) {
+            var kode_barang = $("#kode_barang").val();
+
+            $.ajax({
+                url:"<?php echo site_url('transaksiteknisi/cari_kode_barang');?>",
+                type:"POST",
+                data:"kode_barang="+kode_barang,
+                cache:false,
+                success:function(hasil){
+                //split digunakan untuk memecah string    
+                   data = hasil.split("|");
+                   if(data==0) {
+                       alert("Barang " + kode_barang + " Barang Tidak Ditemukan");
+                       $("#tipe").val("");
+                       $("#merk").val("");
+                   }
+                   else{
+                       $("#tipe").val(data[0]);
+                       $("#merk").val(data[1]);
+                       $("#tambah_barang").focus();
+                   }
+
+                   //console.log(data);
+                }
+            })
+            
+        } 
+
+    }) //end event keypress
+
+    //tambah_barang ke tmp
+    $("#tambah_barang").click(function(){
+        
+        var kode_barang = $("#kode_barang").val();
+        var tipe     = $("#tipe").val();
+        var merk = $("#merk").val();
+
+        if(kode_barang == "") {
+            alert("Kode " + kode_barang + " Masih Kosong ");
+            $("#kode_barang").focus();
+            return false;
+        }
+        else if(tipe == ""){
+            alert("tipe " + tipe + " Masih Kosong ");
+            return false;
+        }
+        else{
+            $.ajax({
+                url:"<?php echo site_url('transaksiteknisi/save_tmp');?>",
+                type:"POST",
+                data:"kode_barang="+kode_barang+"&tipe="+tipe+"&merk="+merk,
+                cache:false,
+                success:function(hasil){
+                    loadData();
+                    EmptyData();
+                    //alert(hasil);
+                   //console.log(data);
+                }
+            })
+        }
+
+    }) //end tambahbarang 
+
+    // //delete tabel tmp
+    $('body').on('click', '.hapus', function(){
+        
+        //ambil dulu atribute kodenya
+        var kode_barang = $(this).attr('kode');
+        $.ajax({
+            url:"<?php echo site_url('transaksiteknisi/hapus_tmp');?>",
+            type:"POST",
+            data:"kode_barang="+kode_barang,
+            cache:false,
+            success:function(hasil){
+                // alert(hasil);
+                loadData();
+            }
+        })
+        
+
+    }); //end delete table tmp
+
+    //simpan transaksi 
+    //$("#simpan").click(function(){
+    $('body').on('click', '#simpan', function(){    
+        
+        //tampung data dari form buat dikirim 
+        var no_transaksi = $("#no_transaksi").val();
+        var tanggal_transaksi   = $("#tanggal_transaksi").val();
+        //var full_name   = $("#full_name").val();
+        //var tgl_kembali  = $("#tgl_kembali").val();
+        //var imei          = $("#imei").val();
+
+        var jumlah_tmp   = parseInt($("#jumlahTmp").val(), 10);
+
+        //cek imei jika kosong 
+        if(jumlah_tmp == 0){
+            alert("Pilih barang yang di pinjam");
+            return false;
+        }
+        else{
+            $.ajax({
+                url:"<?php echo site_url('transaksiteknisi/simpan_transaksi');?>",
+                type:"POST",
+                data:"no_transaksi="+no_transaksi+"&tanggal_transaksi="+tanggal_transaksi+"&jumlah_tmp="+jumlah_tmp,
+                cache:false,
+                success:function(hasil){
+                  //console.log(hasil);
+                 
+                  alert("Transaksi transaksiteknisi Berhasil");
+                  
+                  location.reload();
+                }
+            })
+        }
+        
+    })
+
+
+  
+
+});
+</script>
+
+
+
